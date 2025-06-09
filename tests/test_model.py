@@ -4,7 +4,6 @@ Test unitari per il modello di classificazione delle emozioni.
 
 import os
 import shutil
-import pytest
 from datasets import load_dataset
 from src.model_training import create_models_dir, load_model, preprocess_data
 

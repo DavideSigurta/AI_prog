@@ -4,7 +4,6 @@ Test unitari per le funzioni di Exploratory Data Analysis (EDA).
 
 import os
 import shutil
-import pytest
 from src.eda import create_data_dir, load_data, analyze_data
 
 def test_create_data_dir():
