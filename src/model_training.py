@@ -12,14 +12,11 @@ from transformers import AutoTokenizer, AutoModelForSequenceClassification
 from transformers import Trainer, TrainingArguments
 from datasets import load_dataset
 from sklearn.metrics import accuracy_score, precision_recall_fscore_support
-from tqdm import tqdm
 
 def create_models_dir():
     """
     Crea la directory models/ se non esiste.
-    
-    Nelle dispense del professore si vede l'importanza di separare
-    i modelli addestrati dal codice sorgente.
+
     """
     if not os.path.exists("models"):
         os.makedirs("models")
@@ -86,7 +83,6 @@ def compute_metrics(pred):
     Calcola metriche di valutazione per il modello.
     
     Questa funzione è usata dal Trainer per calcolare metriche durante la valutazione.
-    Simile all'approccio visto nelle dispense del professore per la valutazione dei modelli.
     
     Args:
         pred: Oggetto EvalPrediction con predictions e label_ids.
@@ -115,30 +111,19 @@ def compute_metrics(pred):
 def train_model(model, tokenized_dataset):
     """
     Addestra il modello sul dataset tokenizzato.
-    
-    Args:
-        model: Modello da addestrare.
-        tokenized_dataset: Dataset tokenizzato.
-        
-    Returns:
-        Trainer: Oggetto trainer con il modello addestrato.
     """
     print("Configurazione dell'addestramento...")
     
-    # Configura i parametri di training
+    # Configurazione semplificata compatibile con versioni precedenti di Transformers
     training_args = TrainingArguments(
-        output_dir="./models/checkpoints",          # Directory per i checkpoint
-        num_train_epochs=3,                         # Numero di epoche
-        per_device_train_batch_size=16,             # Batch size per GPU/CPU durante il training
-        per_device_eval_batch_size=64,              # Batch size per GPU/CPU durante la valutazione
-        warmup_steps=500,                           # Passi di warmup per scheduler
-        weight_decay=0.01,                          # Weight decay per evitare overfitting
-        logging_dir="./models/logs",                # Directory per i log
-        logging_steps=10,                           # Log ogni 10 passi
-        evaluation_strategy="epoch",                # Valuta alla fine di ogni epoca
-        save_strategy="epoch",                      # Salva alla fine di ogni epoca
-        load_best_model_at_end=True,                # Carica il miglior modello alla fine del training
-        metric_for_best_model="accuracy",           # Metrica da ottimizzare
+        output_dir="./models/checkpoints",
+        num_train_epochs=3,
+        per_device_train_batch_size=16,
+        per_device_eval_batch_size=64,
+        warmup_steps=500,
+        weight_decay=0.01,
+        logging_dir="./models/logs",
+        logging_steps=10,
     )
     
     print(f"Addestramento configurato con {training_args.num_train_epochs} epoche.")
@@ -203,7 +188,6 @@ def run_training():
     """
     Esegue l'intero processo di training del modello.
     
-    Questo workflow segue la struttura vista nelle dispense del professore:
     1. Preparazione (directory, etc.)
     2. Caricamento dei dati
     3. Preprocessing 

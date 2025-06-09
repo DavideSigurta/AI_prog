@@ -10,3 +10,4 @@ pytest-cov
 pylint
 build
 tqdm
+accelerate>=0.26.0
