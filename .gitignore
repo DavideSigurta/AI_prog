@@ -8,12 +8,15 @@ __pycache__/
 *.py[cod]
 
 .coverage
+.coverage.*
 
 data/
 persistent_data/
 *.png
 *.jpg
 *.jpeg
+
+models/
 
 *.pth
 *.pt

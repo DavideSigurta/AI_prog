@@ -22,3 +22,11 @@ clean:
 run-eda:
 	python -m src.eda
 	@echo "EDA completata. Visualizzazioni salvate nella cartella data/"
+
+train:
+	python -m src.model_training
+	@echo "Training completato. Modello salvato nella cartella models/"
+
+predict:
+	@read -p "Inserisci un testo: " TEXT; \
+	python -c "from src.model_training import predict_emotion; print(f'Emozione predetta: {predict_emotion(\"$$TEXT\")}')"
