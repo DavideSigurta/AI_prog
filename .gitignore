@@ -20,3 +20,8 @@ models/
 
 *.pth
 *.pt
+*.pdf
+
+dist/
+build/
+*.egg-info/

@@ -1,17 +1,71 @@
-name: Deploy AI Project
+name: CI/CD Pipeline
 on: [push]
+
 jobs:
-  build:
+  test-and-lint:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - name: Set up Python 3.12
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Set up Python 3.9
         uses: actions/setup-python@v5
         with:
-          python-version: '3.12'
+          python-version: '3.9'
+      
       - name: Install dependencies
         run: make install
-      - name: Lint
+      
+      - name: Run lint
         run: make lint
-      - name: Test
+      
+      - name: Run unit tests
         run: make test
+  
+  docker-build:
+    runs-on: ubuntu-latest
+    needs: test-and-lint
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Build Docker image
+        run: make docker-build
+      
+      - name: Test Docker image
+        run: docker run --rm emotion-classifier python -c "print('Docker image successfully tested!')"
+      
+      - name: Save Docker image
+        run: docker save emotion-classifier > emotion-classifier.tar
+      
+      - name: Upload Docker image artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: docker-image
+          path: emotion-classifier.tar
+  
+  release-artifacts:
+    runs-on: ubuntu-latest
+    needs: test-and-lint
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.9'
+      
+      - name: Install build dependencies
+        run: |
+          pip install --upgrade pip
+          pip install build
+      
+      - name: Build Python package
+        run: python -m build
+      
+      - name: Upload Python package artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: python-package
+          path: dist/*
