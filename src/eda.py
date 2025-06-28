@@ -14,8 +14,6 @@ def create_data_dir():
     """
     Crea la directory data/ se non esiste.
     
-    Nelle dispense del professore è visibile l'importanza di separare 
-    i dati dal codice, ma assicurarsi che la directory esista.
     """
     if not os.path.exists("data"):
         os.makedirs("data")
